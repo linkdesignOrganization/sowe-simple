@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, afterNextRender, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   LucideArrowUpRight,
@@ -360,12 +360,6 @@ export class ContactPageComponent {
   };
 
   protected readonly copied = signal(false);
-
-  constructor() {
-    // Al llegar a /contacto, llevar el scroll al tope. Acotado a esta página terminal
-    // (NO es scroll-restoration global). afterNextRender corre solo en browser → SSG-safe.
-    afterNextRender(() => window.scrollTo({ top: 0, left: 0 }));
-  }
 
   // Copia el correo al portapapeles y muestra el check por un instante.
   protected copyEmail(): void {

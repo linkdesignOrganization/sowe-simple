@@ -7,7 +7,6 @@ import {
   NgZone,
   OnDestroy,
   PLATFORM_ID,
-  afterNextRender,
   computed,
   effect,
   inject
@@ -556,10 +555,6 @@ export class IndustryDetailPageComponent implements AfterViewInit, OnDestroy {
   private rafId = 0;
 
   constructor() {
-    // Al entrar (típicamente desde una card del mazo, que está scrolleada abajo) arrancamos arriba del
-    // detalle: el router no restaura scroll, así que lo forzamos al primer render (igual que contact-page).
-    afterNextRender(() => window.scrollTo({ top: 0, left: 0 }));
-
     // Slug inexistente → 404 con marca.
     effect(() => {
       if (this.slug() !== null && this.d() === null) {

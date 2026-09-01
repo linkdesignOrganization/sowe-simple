@@ -1,14 +1,23 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
+import { provideScrollRestoration } from './scroll-restoration';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    // Scroll custom (ver scroll-restoration.ts): 'disabled' apaga la
+    // restauración automática pero el router SIGUE emitiendo los eventos
+    // Scroll con la posición — nuestro servicio decide (top en navegación
+    // nueva; back con reintentos porque la altura se asienta tarde).
+    provideRouter(routes, withInMemoryScrolling({
+      scrollPositionRestoration: 'disabled',
+      anchorScrolling: 'disabled',
+    })),
+    provideScrollRestoration(),
     provideHttpClient(withFetch()),
     // El sitio se sirve prerenderizado (angular.json → outputMode: "static"). Sin hidratación
     // Angular DESCARTA ese HTML y reconstruye el DOM entero: medido en prod, el <app-root> se
